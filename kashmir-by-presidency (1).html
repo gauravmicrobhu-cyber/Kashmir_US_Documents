@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kashmir in the American Record — By Presidency</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #FAF8F3;
+    --surface:   #FFFFFF;
+    --border:    #E2DDCF;
+    --ink:       #201D2B;
+    --ink-soft:  #5B5768;
+    --ink-faint: #8B879A;
+    --truman:    #8A1B2C;
+    --eisenhower:#12395F;
+    --kennedy:   #145C36;
+    --johnson:   #472468;
+    --nixon:     #8A4A0C;
+    --bushsr:    #97243F;
+    --clinton:   #0B5C55;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --sans: 'Public Sans', -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.7; }
+
+  header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 22px 20px 18px; position: sticky; top: 0; z-index: 50;
+  }
+  .reading-indicator {
+    position: sticky; top: 0; z-index: 49; background: var(--ink); color: var(--surface);
+    font-family: var(--sans); font-size: 12.5px; font-weight: 600;
+    padding: 8px 20px; display: none; align-items: center; gap: 8px;
+  }
+  .reading-indicator.visible { display: flex; }
+  .reading-indicator .ri-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .reading-indicator a { color: var(--surface); opacity: 0.7; text-decoration: none; margin-left: auto; font-size: 11.5px; }
+  .eyebrow { font-size: 12.5px; font-weight: 600; color: var(--ink-faint); }
+  .masthead { font-family: var(--serif); font-size: 23px; font-weight: 700; color: var(--ink); line-height: 1.25; margin-top: 4px; }
+  .masthead-sub { font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+
+  .status-banner {
+    background: #FBF3E9; border: 1px solid #E8D5B8; border-radius: 6px;
+    padding: 14px 16px; margin: 18px 20px 0; font-size: 13px; color: var(--ink-soft); line-height: 1.65;
+  }
+  .status-banner strong { color: var(--ink); }
+
+  main { max-width: 680px; margin: 0 auto; padding: 26px 20px 20px; }
+
+  /* ── INDEX ── */
+  .pres-index { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+  .pres-card {
+    display: block; background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--ink);
+    border-radius: 4px; padding: 16px 18px; text-decoration: none; color: var(--ink);
+  }
+  .pres-name { font-family: var(--serif); font-size: 18px; font-weight: 700; }
+  .pres-tenure { font-family: var(--sans); font-size: 12.5px; color: var(--ink-faint); margin-top: 1px; }
+  .pres-teaser { font-size: 13.5px; color: var(--ink-soft); margin-top: 8px; line-height: 1.55; }
+  .pres-count { font-family: var(--sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-top: 8px; display: inline-block; padding: 2px 8px; border-radius: 3px; }
+
+  /* ── PRESIDENT SECTIONS ── */
+  .pres-section { padding-top: 20px; margin-bottom: 8px; border-top: 3px solid var(--ink); }
+  .pres-section.first { border-top: none; }
+  .pres-eyebrow { font-family: var(--sans); font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+  .pres-h1 { font-family: var(--serif); font-size: 27px; font-weight: 700; margin: 4px 0 4px; }
+  .pres-sub { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 22px; }
+
+  h3 {
+    font-family: var(--serif); font-size: 19px; font-weight: 700; color: var(--ink);
+    margin: 34px 0 6px;
+  }
+  .h3-date { display: block; font-family: var(--sans); font-size: 11.5px; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+  p { font-size: 16px; color: var(--ink); margin-bottom: 16px; line-height: 1.75; }
+
+  blockquote {
+    font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink);
+    border-left: 3px solid var(--border); padding: 4px 0 4px 20px; margin: 20px 0;
+    line-height: 1.65;
+  }
+  blockquote cite { display: block; font-family: var(--sans); font-style: normal; font-size: 12.5px; color: var(--ink-faint); margin-top: 8px; }
+
+  .doc-card {
+    background: var(--surface); border: 1px solid var(--border); border-left-width: 4px;
+    border-radius: 4px; padding: 18px 20px; margin: 22px 0; cursor: pointer;
+  }
+  .doc-label { font-family: var(--sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+  .doc-title { font-family: var(--serif); font-size: 16px; font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .doc-chevron { font-family: var(--sans); font-size: 13px; color: var(--ink-faint); flex-shrink: 0; transition: transform 0.2s ease; }
+  .doc-card.collapsed .doc-chevron { transform: rotate(-90deg); }
+  .doc-body { overflow: hidden; max-height: 800px; transition: max-height 0.25s ease, opacity 0.2s ease; opacity: 1; }
+  .doc-card.collapsed .doc-body { max-height: 0; opacity: 0; margin: 0; }
+  .doc-card.collapsed { padding-bottom: 14px; }
+  .doc-source { font-size: 12.5px; color: var(--ink-faint); font-style: italic; margin-top: 10px; }
+  .tag-full { color: #145C36; }
+  .tag-excerpt { color: #5B2A80; }
+  .tag-cited { color: #12395F; }
+  .tag-secondary { color: #8A4A0C; }
+
+  .thin-note {
+    background: #FBEFEF; border: 1px solid #E8C8C8; border-radius: 6px;
+    padding: 14px 16px; font-size: 13px; color: var(--ink-soft); line-height: 1.6; margin: 18px 0;
+  }
+  .thin-note strong { color: var(--ink); }
+
+  .sources-mini {
+    margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--border);
+    font-size: 12px; color: var(--ink-faint); line-height: 1.6;
+  }
+
+  footer { text-align: center; padding: 30px 20px 44px; font-size: 12px; color: var(--ink-faint); }
+
+  a.top-link { display: inline-block; margin-top: 30px; font-size: 12.5px; color: var(--ink-soft); text-decoration: none; }
+  a.top-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">PRISM — Policy Research Institute for Security, Intelligence &amp; Modern Threats</div>
+  <div class="masthead">Kashmir in the American Record</div>
+  <div class="masthead-sub">Organized by presidency, not by year — a growing archive</div>
+</header>
+
+<div class="reading-indicator" id="readingIndicator">
+  <span class="ri-dot" id="riDot"></span>
+  <span id="riText">Reading: —</span>
+  <a href="#top">↑ Index</a>
+</div>
+
+<div class="status-banner">
+  <strong>This is a working archive, being actively extended.</strong> Every entry below has been read directly and is labelled by exactly how: <strong style="color:#145C36">full text</strong> means the complete document was opened and read; <strong style="color:#5B2A80">substantial excerpt</strong> means real, directly quoted language was retrieved but not the whole document; <strong style="color:#12395F">cited, not read</strong> means a document's existence is confirmed through an official index but its text hasn't been pulled yet; <strong style="color:#8A4A0C">secondary</strong> means this is someone else's account of a document, not the document. Some presidencies below have a rich record; others are honestly thin because the research hasn't reached them yet, not because nothing happened. More is being added over the coming days.
+</div>
+
+<main>
+
+  <div class="pres-index" id="top">
+    <a href="#truman" class="pres-card" style="border-left-color:var(--truman)">
+      <div class="pres-name">Truman</div>
+      <div class="pres-tenure">1945–1953</div>
+      <div class="pres-teaser">From a British proposal Washington postponed, through Independence, the accession itself, a secretly-considered partition plan, a Soviet-bloc commissioner's backchannel to Kashmir's government, and the ceasefire that froze it all in place.</div>
+      <span class="pres-count" style="background:#E5F0EA;color:var(--truman)">Richest section — 53 documents</span>
+    </a>
+    <a href="#eisenhower" class="pres-card" style="border-left-color:var(--eisenhower)">
+      <div class="pres-name">Eisenhower</div>
+      <div class="pres-tenure">1953–1961</div>
+      <div class="pres-teaser">A joint statement with Pakistan's Prime Minister, and a full Special National Intelligence Estimate on where the dispute was headed.</div>
+      <span class="pres-count" style="background:#E5EEF6;color:var(--eisenhower)">2 documents</span>
+    </a>
+    <a href="#kennedy" class="pres-card" style="border-left-color:var(--kennedy)">
+      <div class="pres-name">Kennedy</div>
+      <div class="pres-tenure">1961–1963</div>
+      <div class="pres-teaser">The only administration where a president personally and repeatedly pushed for a Kashmir settlement — in his own signed directive, and through his own envoy.</div>
+      <span class="pres-count" style="background:#E5F0EA;color:var(--kennedy)">5 documents</span>
+    </a>
+    <a href="#johnson" class="pres-card" style="border-left-color:var(--johnson)">
+      <div class="pres-name">Johnson</div>
+      <div class="pres-tenure">1963–1969</div>
+      <div class="pres-teaser">The 1965 war, a dedicated CIA Kashmir Task Force, and the nuclear anxiety correspondence that ran underneath it all.</div>
+      <span class="pres-count" style="background:#F0E7F5;color:var(--johnson)">3 documents</span>
+    </a>
+    <a href="#nixon" class="pres-card" style="border-left-color:var(--nixon)">
+      <div class="pres-name">Nixon</div>
+      <div class="pres-tenure">1969–1974</div>
+      <div class="pres-teaser">The Blood Telegram, and a live exchange from Kissinger's own office about Chinese posture near Azad Kashmir during the 1971 crisis.</div>
+      <span class="pres-count" style="background:#FBEFE0;color:var(--nixon)">3 documents</span>
+    </a>
+    <a href="#bushsr" class="pres-card" style="border-left-color:var(--bushsr)">
+      <div class="pres-name">Bush Sr.</div>
+      <div class="pres-tenure">1989–1993</div>
+      <div class="pres-teaser">Thin by honest necessity, not by absence — the 1990 crisis and the Gates mission, not yet independently verified.</div>
+      <span class="pres-count" style="background:#FBEFE0;color:var(--bushsr)">1 document, unverified</span>
+    </a>
+    <a href="#clinton" class="pres-card" style="border-left-color:var(--clinton)">
+      <div class="pres-name">Clinton</div>
+      <div class="pres-tenure">1993–2001</div>
+      <div class="pres-teaser">Also thin — a 1993 intelligence estimate, a short FOIA record, and a Clinton Library catalog entry, none opened yet.</div>
+      <span class="pres-count" style="background:#FBEFE0;color:var(--clinton)">3 documents, mostly unopened</span>
+    </a>
+  </div>
+
+  <!-- ══════════════ TRUMAN ══════════════ -->
+  <div class="pres-section first" id="truman">
+    <div class="pres-eyebrow" style="color:var(--truman)">1945–1953</div>
+    <h1 class="pres-h1">Truman</h1>
+    <div class="pres-sub">Eight years, three FRUS volumes, and the founding of everything that followed — from a diplomatic mission's status, to Independence, to the actual accession of Kashmir, to the policy paper that first set a plebiscite as the American goal.</div>
+
+    <p>The relationship that eventually inherited the Kashmir dispute did not begin with America stepping into a British vacuum. It began with Britain proposing closer diplomatic ties in January 1946, and Washington saying not yet.</p>
+
+    <h3><span class="h3-date">7 January 1946</span>A British proposal Washington wants to postpone</h3>
+    <p>Secretary of State Byrnes cabled Commissioner George Merrell in New Delhi: Britain, through its embassy in Washington, had asked the State Department to reconsider raising India's diplomatic representation to full ministerial rank. Washington's answer was no — or not yet.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Byrnes tells Merrell the US prefers to wait <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"Dept has informed BritEmb that... it prefers to postpone making any decision in this matter." The request had, in fact, first come from Britain the previous October — Washington had been stalling for months.</p>
+      <div class="doc-source">Secretary of State to Commissioner in India, 7 January 1946. FRUS 1946, Vol. V, Document 42.</div>
+      </div>
+    </div>
+    <p>Merrell's own reply, two days later, revealed something about how the relationship had actually worked until then: "We have never endeavored to conceal the fact that HMG's attitude has been responsible for our 'quasi-diplomatic' status." It was Britain, not Washington, that had kept the US-India relationship formally low-key.</p>
+
+    <h3><span class="h3-date">February 1946</span>The Cabinet Mission, and a mutiny</h3>
+    <p>On 19 February, Attlee announced a Cabinet Mission to negotiate India's constitutional future. Two days later, a senior British official told Ambassador Winant privately that Jinnah's Pakistan demand had "gained such momentum that doubtful if Jinnah or anyone else could apply the brakes." Within days, the Royal Indian Navy mutinied in Bombay and spread to Karachi. British officials speaking to the Americans afterward went further than any public statement: Pethick-Lawrence, on India's future, said Britain wanted to build "an India for Indians but not an India for some other power" — Cold War language, deployed a year before the term existed.</p>
+
+    <h3><span class="h3-date">April 1946</span>A live intelligence dispute, addressed to Henderson</h3>
+    <p>The mutiny's fallout produced America's own internal disagreement. Merrell found no evidence Communists had instigated the resulting riots — only exploited them. The consulates in Karachi and Madras reported the opposite, with "undoubted evidence of organization — probably of Communistic origin." The memo laying out the dispute went to Loy Henderson, then a desk officer — the same man who would arrive as Ambassador two and a half years later, mid-crisis.</p>
+
+    <h3><span class="h3-date">June 1946</span>Merrell explains why India distrusts America too</h3>
+    <p>During a famine crisis, Merrell reported that Indian press hostility toward the US wasn't really about British colonialism — it was about broken American wartime promises. "During the early part of our participation in the recent war, our Government... 'oversold' itself to Indians," creating hopes of liberation that were never realized. He traced it back further still, to Vallabhbhai Patel, who told an American officer that Indians' disillusionment first began with Woodrow Wilson's Fourteen Points, a generation earlier.</p>
+
+    <h3><span class="h3-date">September–October 1946</span>Truman decides</h3>
+    <p>The Interim Government took office 2 September, representative of "at least 80 percent" of Indians since the Muslim League still refused to join. A memo dated 30 August carries Truman's own handwritten approval of the mission-status upgrade, given 3 September. By October, the two countries agreed to exchange ambassadors, and Merrell became Chargé d'Affaires pending a full appointment.</p>
+
+    <h3><span class="h3-date">December 1946</span>The crisis</h3>
+    <p>The Cabinet Mission Plan collapsed over a single technical question — separate provincial votes versus majority rule on regional groupings. On 7 December, Britain told Washington it "believes it might be helpful" if America informally pressed Nehru — and four days later, Acheson instructed Merrell to deny any British involvement while delivering exactly that British-requested message.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Washington tells its own envoy to deny British involvement — while acting on it <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"Important dispel any Indian belief US actions inspired at instance Brit," Acheson cabled, instructing Merrell to stress the approach was "made solely on US initiative." Three days earlier, that approach had in fact originated from a British request.</p>
+      <div class="doc-source">Acting Secretary of State to Chargé Merrell, 11 December 1946. FRUS 1946, Vol. V, Document 64.</div>
+      </div>
+    </div>
+    <p>Merrell delivered the message to Patel, and got the sharpest response any American diplomat received all year — an accusation that the US "favored the strong," and a pointed historical parallel: "In course of American revolution there was period when fighting became necessary." That same evening, Rajagopalachari told Merrell the Cabinet Mission Plan's "ten year experiment" clause had originally been an American idea, not British. Three days later, Nehru offered Merrell an unprompted personal aside comparing himself to Jinnah's "Hindu background." By month's end, Liaquat Ali Khan admitted the League was "beginning to feel that perhaps outright Pakistan would be only means" of securing its goals.</p>
+
+    <h3><span class="h3-date">1947</span>Independence, and the Maharaja named before the crisis</h3>
+    <p>Henry Grady presented credentials as first US Ambassador on 25 June 1947. Nehru's first request of him: help persuade Britain to keep Mountbatten on as Governor-General of both new dominions, not just India. Independence came 15 August. By 7 October, with Partition violence dominating every exchange, India's Ambassador Asaf Ali met Under Secretary Lovett — and mentioned, almost in passing, that India's "northernmost boundary lay only fifteen miles from Soviet territory," a State Department footnote clarifying this was "a boundary of the domains of the Maharaja of Kashmir who has not yet acceded to India or Pakistan." Fifteen days later, that undecided status stopped being a footnote.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read — the founding document</div>
+      <div class="doc-title">The accession itself, reported the day after it happened <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"The Maharaja... signed instrument of accession which was accepted same day by Mountbatten." Mountbatten's own acceptance letter is quoted directly: "as soon as law and order have been restored in Kashmir and her soil cleared of the invader the question of the state's accession should be settled by reference to the people." A footnote corrects the body text's own date error — signed 26 October, not 27th, as the cable claimed.</p>
+      <div class="doc-source">The Chargé in Pakistan (Lewis) to the Secretary of State, 28 October 1947. FRUS 1947, Vol. III, Document 119.</div>
+      </div>
+    </div>
+    <p>Two weeks later, Grady's own weary verdict on a refugee-airlift request: "The roots of the conflict which brought about the division of India too deep to be healed or particularly ameliorated by loan of ten planes."</p>
+
+    <h3><span class="h3-date">6 January 1948</span>Marshall's founding policy paper</h3>
+    <p>The day the UN Security Council first convened on Kashmir, Secretary of State George Marshall signed the paper defining American strategy. It reveals that the plebiscite outcome, so associated with the UN's later resolutions, was America's own preferred solution from the start.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read — the founding document</div>
+      <div class="doc-title">Marshall: a plebiscite is the only durable answer — and let Britain lead <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"It is the opinion of the Department that the only solution acceptable to all parties concerned in the Kashmir problem will eventually be a determination, probably by plebiscite... taking into account the possibility that some form of partition may be proposed." Washington wanted Britain "as the most directly concerned third govt" to lead, positioning the US as "virtually inevitable second choice" — while noting British and American objectives were already closely aligned. The partition clause is easy to miss on a first read, but it means the October 1948 partition discussion below wasn't a later, secret departure from this paper — it was a contingency built into American policy from day one.</p>
+      <div class="doc-source">The Secretary of State to Austin, 6 January 1948. FRUS 1948, Vol. V, Part 1, Document 212.</div>
+      </div>
+    </div>
+    <p>Eight days later, Britain floated a concrete partition plan — Pakistani troops north, Indian troops south, the Valley jointly held under a neutral UN commander — that never went anywhere. Six weeks after that, Sheikh Abdullah told Grady he doubted either accession outcome would ever be accepted, and proposed instead that Kashmir stay internally independent with defense run jointly by both dominions.</p>
+
+    <h3><span class="h3-date">February–March 1948</span>Washington wasn't of one mind, and neither was the Council</h3>
+    <p>The record often reads as if American strategy moved as a single coordinated block. It didn't. Within weeks of Marshall's paper, Washington's own two ambassadors were pulling in different directions, and the Council itself was riven by procedural mistrust between India and Pakistan's delegations.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Grady and Austin, contradicting each other <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">USUN's Noyes reported with alarm that Ambassador Grady in New Delhi had, in a 7 February telegram, ended up "giving his support to a procedure which is almost exactly like the original Indian position" — directly at odds with Ambassador Austin at the UN, who was "rather far out in front" on a tougher interim-administration stance. Noyes asked Washington to "straighten New Delhi out." Grady's own proposal, separately, suggested the plebiscite be preceded by parliamentary elections — nearly identical to India's own 27 January scheme, which specified those elections would happen "under interim government headed by Sheikh Abdullah."</p>
+      <div class="doc-source">Memorandum of Conversation by Thurston, 9 February 1948 (Document 232); Secretary of State to Embassy in India, 7 February 1948 (Document 234). FRUS 1948, Vol. V, Part 1.</div>
+      </div>
+    </div>
+    <p>Six weeks later, Pakistan's Foreign Minister Zafrullah Khan complained bitterly about being outmaneuvered at the Council itself — China's delegate, Tsiang, had privately discussed a Plebiscite Administrator concept with him over lunch on 11 March, then presented a formal draft resolution built on that conversation a week later, without the customary simultaneous notice to both parties that previous Council presidents had observed. It was a small procedural grievance, but it fed a larger Pakistani suspicion that the process itself wasn't neutral.</p>
+
+    <h3><span class="h3-date">8 May 1948</span>Regular troops, confirmed — before either side admitted it</h3>
+    <p>Pakistan's public position throughout this period was that only irregular tribesmen were fighting in Kashmir. American intelligence reaching Washington that spring told a different story.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Three Pakistani Army battalions, and anti-aircraft guns firing on Indian planes <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"Pakistan has three regular Pakistan Army battalions Kashmir now, one vicinity Uri, one vicinity Poonch, one vicinity Mirpur... Two ack-ack guns on Pakistan side Kohala bridge have instructions fire and have fired at Indian planes attempting bomb bridge." The report goes on to assess how an Indian drive toward Mirpur could threaten canal headwaters feeding western Punjab's irrigation system — real operational, strategic detail, not diplomatic language.</p>
+      <div class="doc-source">Karachi to the Secretary of State, 8 May 1948. FRUS 1948, Vol. V, Part 1, Document 268 (745.45F/5–848).</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">30 October 1948</span>A secret consideration: partition, after all</h3>
+    <p>Nine months after Marshall's paper called a plebiscite "the only solution," Austin's own telegram from Paris reveals Washington had quietly been weighing something else entirely — while carefully avoiding saying so in public.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">"We have for some time considered that such a formula is worthy of careful consideration" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"Looking now to the possibility of combining the principle of a plebiscite with partition of certain areas of Jammu and Kashmir, we have for some time considered that such a formula is worthy of careful consideration. For reasons that are obvious we have, however, been disinclined to take the initiative on the point." Austin reports UNCIP itself found the idea unpopular, "especially with the Moslems of both parties who feared that by any partition they would lose the Kashmir Valley" — but that some Commission members still saw "distinct administrative advantages" to partition in certain areas.</p>
+      <div class="doc-source">The US Representative at the UN (Austin) to the Secretary of State, 30 October 1948. FRUS 1948, Vol. V, Part 1, Document 353.</div>
+      </div>
+    </div>
+    <p>The plebiscite Washington announced publicly and the partition Washington quietly discussed with London were never, in fact, mutually exclusive options in American thinking — the public position was simpler than the private one.</p>
+
+    <h3><span class="h3-date">19–20 November 1948</span>Henderson arrives, into live fighting</h3>
+    <p>Loy Henderson — who had read the RIN Mutiny intelligence dispute as a desk officer two and a half years earlier — took charge as Ambassador on 19 November 1948. The next day, a military appreciation crossed his desk: India's capture of Dras, and a note that "a possible advance toward Kargil should not be overlooked." Fifty-one years before Kargil became globally known, it appears here as a tactical footnote in Henderson's first briefing.</p>
+
+    <h3><span class="h3-date">31 December 1948</span>Nehru's own words, as the ceasefire takes effect</h3>
+    <p>Not a US document — Nehru's private New Year's Eve letter to Mountbatten, written the night the ceasefire he'd just ordered was taking hold, fifteen months into the fighting.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left:4px solid #8A4A0C;">
+      <div class="doc-label" style="color:#8A4A0C;">Full text read — not a US document</div>
+      <div class="doc-title">"It is a great thing to have a ceasefire and to put an end to the 15 months of fighting" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"We felt however that in view of the general agreement arrived at, it would be a senseless waste of life not to have an immediate ceasefire... We have suggested 11:59 hours on January 1st for the ceasefire... The future in regard to Kashmir is full of difficulty and there is going to be a great deal of trouble. But it is a great thing to have a ceasefire." He closes: "As I was dictating this letter, the New Year has crept in."</p>
+      <div class="doc-source">Nehru to Lord Mountbatten, 31 December 1948. Selected Works of Jawaharlal Nehru, Second Series, Vol. 9, pp. 227–228 (The Nehru Archive).</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">1–4 January 1949</span>The ceasefire, formalized — with American boots on the ground</h3>
+    <p>The ceasefire took effect at midnight, 1 January 1949. Within days, Washington confirmed something not widely appreciated: American personnel themselves became part of enforcing it.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">The US is asked to supply 20 observer officers <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"The Governments of both countries... have already voluntarily put the cease fire agreement into effect as of 12 o'clock midnight January 1, 1949," the Acting Secretary of State wrote to the Secretary of Defense — and confirmed the UN Secretary-General had formally asked the United States to furnish twenty officers to observe it, with the Commission expected back on the subcontinent before 20 January.</p>
+      <div class="doc-source">The Acting Secretary of State to the Secretary of Defense (Forrestal), 4 January 1949. FRUS 1949, Vol. VI, 501.BC Kashmir/1–449.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">28 April 1949</span>A second, secret Karachi Agreement</h3>
+    <p>Not a US document, and not part of the same negotiation this archive otherwise tracks — but worth flagging clearly, since the naming collision could mislead future research. Three months before the well-known July 1949 India-Pakistan military Karachi Agreement (which fixed the ceasefire line and is already recorded above), a wholly separate agreement was reportedly signed in Karachi between Pakistan's government and the Azad Kashmir administration itself.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left:4px solid #8A4A0C;">
+      <div class="doc-label" style="color:#8A4A0C;">Secondary — not a US document, not independently verified here</div>
+      <div class="doc-title">Azad Kashmir cedes Gilgit-Baltistan to Pakistan — and it stayed secret for over 40 years <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Signed by Mushtaq Ahmed Gurmani for Pakistan and Sardar Ibrahim Khan for Azad Kashmir, the agreement reportedly transferred control of Gilgit-Baltistan (then the "Northern Areas") to direct Pakistani administration, along with defense, foreign affairs and communications. Per secondary accounts, it went unreported in 1949 press coverage and unmentioned in contemporary memoirs, only becoming public knowledge in the 1990s.</p>
+      <div class="doc-source">Secondary sourcing only (Wikipedia, citing later scholarship) — the primary agreement text has not been located or read for this archive.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">7 May 1949</span>Bajpai's own secret: he thinks partition is the answer</h3>
+    <p>Five months before Truman's own appeal, India's most senior diplomat told Henderson something he could never say in public — and it turns out to mirror exactly what Washington was privately weighing on its own side.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">"Partition would be soundest solution" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Bajpai told Henderson, "on purely personal basis," that although India should proceed with a plebiscite if Pakistan insisted, "plebiscite will not solve Kashmir problem... Partition would be soundest solution. Unfortunately Pakistan continues blindly and emotionally to insist on plebiscite and all of Kashmir." He added that he was "not in position [to] suggest partition since Pakistan would construe such suggestion as fear that India would lose plebiscite."</p>
+      <div class="doc-source">Ambassador Henderson to the Secretary of State, 7 May 1949. FRUS 1949, Vol. VI, Document 1186 (501.BC Kashmir/5–749).</div>
+      </div>
+    </div>
+    <p>Read alongside Austin's October 1948 telegram above, this means both governments' most senior officials privately favored partition over a plebiscite at roughly the same time — and neither could say so publicly without the other side reading it as weakness.</p>
+
+    <h3><span class="h3-date">June–July 1949</span>The Chyle episode</h3>
+    <p>Six months into the ceasefire, Henderson reported something UNCIP's other members found genuinely unsettling — and it turned out to explain a decision this archive had already recorded without knowing why.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">A Communist-bloc commissioner, secret talks with Sheikh Abdullah, and a Soviet-independence rumor <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"Czech member UNCIP, Chyle, has had private talks with Sheikh Abdullah and other members Kashmir Government during past ten days. UNCIP members have no legitimate reason deal with Kashmir Government and he volunteers no information re nature of talks. Curious onlookers within UNCIP speculate that he may be discussing possibility independence Kashmir with backing Soviet bloc." Henderson adds that Chyle was "conceited, aggressive, imperious, impatient of opposition" beneath an outwardly cooperative manner.</p>
+      <div class="doc-source">Ambassador Henderson to the Secretary of State, 9 June 1949. FRUS 1949, Vol. VI, Document 1193 (501.BC Kashmir/6–949).</div>
+      </div>
+    </div>
+    <p>Dr. Oldřich Chyle had succeeded Josef Korbel as Czechoslovakia's UNCIP representative — Korbel's daughter, Madeleine Albright, would become US Secretary of State half a century later. By September 1949, secondary Indian sources report Chyle was directly advising Kashmir state minister D.P. Dhar, who wrote Nehru a "top secret and personal" note after "extensive meetings" with him: an American-proposed arbitrator, Chyle warned, would "lord over" both the Commission and the two governments, reducing Kashmir's own position to "one of abject pity." Chyle separately called the whole arbitration push "a pre-planned attempt on the part of the USA and UK to intervene in the dispute." <em>(This second-hand account of Chyle's private advice is not independently verified against a primary Indian source and should be treated as reported, not confirmed.)</em></p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Isolated 4-to-1, and Washington's own fear of Soviet obstruction <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">By 5 July, "all members except Czechoslovak now take same view" that further arbitration negotiation was useless — Chyle stood alone. Three days later, the State Department gave Henderson its own reasoning for avoiding a Security Council referral: it would "provide opportunity Soviet obstruction," citing specific — if unprinted — Moscow-to-Delhi and Moscow-to-Karachi cables Washington was tracking directly.</p>
+      <div class="doc-source">Ambassador Henderson to the Secretary of State, 5 July 1949; The Secretary of State to the Embassy in India, 8 July 1949. FRUS 1949, Vol. VI, 501.BC Kashmir/7–549 and /7–849.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">15–18 August 1949</span>Nehru, unguarded</h3>
+    <p>Weeks into the arbitration push, Nehru summoned Henderson personally — and gave the rawest, least diplomatic account of his position found anywhere in this archive.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">"He would not give an inch... even if Kashmir, India and the whole world would go to pieces" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"He said he was tired of receiving moralistic advice from US. India did not need advice from US or any other country as to its foreign or internal policies... So far as Kashmir was concerned he would not give an inch. He would hold his ground even if Kashmir, India and the whole world would go to pieces." Nehru framed the dispute in explicitly civilizational terms: India's secular, pluralist philosophy against what he called Pakistan's "theocratic state" — with Kashmir as the proof of which vision could work.</p>
+      <div class="doc-source">Ambassador Henderson to the Secretary of State, 15 August 1949. FRUS 1949, Vol. VI, Document 1205 (845.00/8–1549).</div>
+      </div>
+    </div>
+    <p>Bajpai told Henderson separately that the State Department's own expressions of concern had been "misinterpreted" as doubting India's good faith — Washington's formal reply, cabled back on 5 August, insisted "the Dept remains convinced that both India and Pak desire a peaceful solution" and regretted the misunderstanding. Nehru's confrontation with Henderson happened regardless, days later.</p>
+
+    <h3><span class="h3-date">25–31 August 1949</span>Truman writes to both Prime Ministers</h3>
+    <p>Ten days after Nehru's outburst, Washington played its highest card — a personal letter from the President himself, sent to Nehru and Liaquat Ali Khan simultaneously.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read — the founding document</div>
+      <div class="doc-title">Truman, in his own words: "I urge you to accept the recommendation for arbitration" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"Asia is today in the midst of a great social and political revolution... In the interest of your own nation and in the interest of the world community, I urge you to accept the recommendation for arbitration of truce terms now placed before your Govt by the UN. I am addressing a similar communication to the Prime Minister of [Pakistan/India]." The instruction to deliver it was explicit: same day as UNCIP's own presentation of the arbitration proposal, or within 24 hours to the Foreign Office if the Prime Minister was unavailable.</p>
+      <div class="doc-source">The Secretary of State to the Embassy in India (text of President Truman's message), 25 August 1949. FRUS 1949, Vol. VI, Document 1206 (501.BC Kashmir/8–2549).</div>
+      </div>
+    </div>
+    <p>Days later, Acheson personally met Nehru's own sister, Ambassador Vijaya Lakshmi Pandit, to press the point further — tying it explicitly to Nehru's broader standing in Asia.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Acheson to Pandit: "We looked to him to assume the leadership in the rehabilitation of Asia" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"In conversations which I had had with the President concerning the situation in China and the Far East it had been apparent to both of us that the Ambassador's brother, the Prime Minister of India, had emerged as a world figure of great influence and that we looked to him to assume the leadership in the rehabilitation of Asia... we deeply hoped that in receiving the President's personal appeal the Prime Minister would give the most careful consideration" to arbitration. Pandit thanked him warmly, praised her brother's record on Kashmir, but committed to nothing.</p>
+      <div class="doc-source">Memorandum of Conversation by the Secretary of State, 30 August 1949. FRUS 1949, Vol. VI, 501.BC Kashmir/8–2949.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">8 September 1949</span>Two replies, two very different answers</h3>
+    <p>Pakistan's Prime Minister accepted within hours of receiving Truman's letter. India's did not — though his written reply was careful never to say so outright.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Liaquat Ali Khan accepts, and points at India <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Signed the same evening the letter arrived, delivered urgently and in secret: "I thank you for your message of August 30, 1949, urging the acceptance of the recommendation... The Pakistan Government greatly appreciates the keen interest you have shown to the early settlement of the Kashmir dispute... India has hitherto resisted every effort made by Security Council and later on by the United Nations Commission to bring about that result."</p>
+      <div class="doc-source">The Chargé in Pakistan (Wolf) to the Secretary of State, transmitting Liaquat's letter, 8 September 1949. FRUS 1949, Vol. VI, Document 1210.</div>
+      </div>
+    </div>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Nehru replies warmly — and commits to nothing <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"My dear Mr. President, I thank you for your letter of the 30th August... In view of the importance of its subject matter, I had to consult my colleagues and the Governments of Jammu and Kashmir. This will explain the slight delay... I greatly appreciate the friendly solicitude which prompted you to write and particularly welcome your frankness because it enables me to write with equal candour." The reply, forwarded early by Bajpai so Washington would "know nature reply in advance," was friendly in tone and technically left the door open — but Bajpai told Henderson separately that he did not believe further arbitration attempts would help, and hoped UNCIP could "be wound up soon."</p>
+      <div class="doc-source">Ambassador Henderson to the Secretary of State, transmitting Nehru's reply, 8 September 1949. FRUS 1949, Vol. VI, Document 1209 (501.BC Kashmir/9–849).</div>
+      </div>
+    </div>
+    <p>Read together, these two replies are the cleanest evidence in the whole archive of how differently Pakistan and India handled the same American pressure: Pakistan said yes in writing and used the moment to needle India publicly; India said nothing that could be quoted against it, and let the substance die quietly through Bajpai instead.</p>
+
+    <h3><span class="h3-date">December 1949</span>A third mediator, and Nehru's four options</h3>
+    <p>With UNCIP's own efforts exhausted, a new track opened before the year was out — General A.G.L. McNaughton of Canada, working under a mid-December Security Council resolution, meeting separately with India's and Pakistan's representatives to find revised common ground. Nehru rejected his proposals too. Days later, Britain's High Commissioner, General Nye, pressed Nehru directly with a stark framing.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Nye to Nehru: war, stalemate, mediation, or arbitration — pick one <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Nye "took line with Prime Minister that there were only four possibilities: war, continued stalemate, mediation and arbitration. As first two were unthinkable it remained to discuss latter two." He pointed out that Nehru's own rejection of McNaughton's mediation proposals was itself evidence India wasn't prepared to compromise — so arbitration was the only path left, if India genuinely wanted a settlement. The record is blunt about the result: "Nehru apparently gave Nye no encouragement whatever." The principal Indian decision-makers behind the rejection were named as Nehru, Governor-General Patel, and Kashmir's Deputy Prime Minister, Bakshi Ghulam Mohammad.</p>
+      <div class="doc-source">FRUS 1949, Vol. VI, ~p. 1770 (exact document number not yet confirmed).</div>
+      </div>
+    </div>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">India's revised position, relayed after McNaughton's talks with Bajpai <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Austin transmits "the text of Indian position as revised in light of McNaughton's conversation with Bajpai this afternoon" — a formal restatement of India's stance following the Council's 17 December resolution authorizing McNaughton to consult both parties and report back.</p>
+      <div class="doc-source">The US Representative at the UN (Austin) to the Secretary of State, 19 December 1949. FRUS 1949, Vol. VI, 501.BC Kashmir/12–1949.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">April–September 1950</span>The Dixon mission</h3>
+    <p>With McNaughton's effort also dead, the Security Council appointed Sir Owen Dixon, an Australian jurist, as UN Representative on 12 April 1950 — a role carrying most of UNCIP's own powers. Dixon deliberately avoided negotiating with each Prime Minister separately.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Dixon's method: make them talk to each other, in his presence <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Bajpai told Henderson that Dixon "believes it would be mistake for him to talk to each Prime Minister separately re matter demilitarization. His plan is to persuade them talk to each other in his presence on subject. If they fail find basis for agreement he might then offer suggestions."</p>
+      <div class="doc-source">Ambassador Henderson to the Secretary of State, 2 June 1950. FRUS 1950, Vol. V, Document 794 (357.AB/6–250).</div>
+      </div>
+    </div>
+    <p>By July, Dixon had gone further than any previous mediator — proposing what became known as "regional plebiscites": voting only in the genuinely contested Kashmir Valley, while allocating other areas without a vote on the assumption their outcome was already predictable. Getting there required real maneuvering neither side wanted seen in public.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Nehru wants deniability; Liaquat refuses once he learns what's on the table <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"Nehru had refused allow Dixon make offer to Liaquat on his behalf. He had however, agreed that Dixon could outline to Liaquat what Nehru had said." Dixon planned to privately warn Liaquat he might propose "partition plus plebiscite" — but "Liaquat and his associates flatly refused attend conference for purpose discussing partition plus plebiscite" once that became clear. Nehru, told his own idea had collapsed the conference before it started, wondered aloud whether Dixon should simply return to Lake Success rather than report the mission a failure outright.</p>
+      <div class="doc-source">Ambassador Henderson to the Secretary of State, 11 August 1950. FRUS 1950, Vol. V, Document 799 (357.AB/8–1150).</div>
+      </div>
+    </div>
+    <p>Dixon reported to the Security Council on 15 September 1950 that no agreement had been reached on demilitarization or a plebiscite, and formally requested that his own position be terminated. Ten days later, in a private dinner conversation not meant for the record, he said what he'd never put in writing.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Off the record: "He believed that the Vale of Kashmir should go to Pakistan" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Dixon told Assistant Secretary Hickerson privately that "the Vale of Kashmir should go to Pakistan," and floated a trade: since securing India's agreement to a fair plebiscite in the Valley was "so exceedingly difficult," Pakistan might simply be given the Valley outright, in exchange for concessions to India elsewhere. He separately judged that Kashmir was being "kept alive by the Indians as an issue on which to hang other aims" — including, he suggested, an excuse for maintaining a large standing army.</p>
+      <div class="doc-source">Memorandum of Conversation by the Assistant Secretary of State for UN Affairs (Hickerson), 25 September 1950. FRUS 1950, Vol. V, Document 808 (357.AB/9–2550).</div>
+      </div>
+    </div>
+    <p>The UN's own chief mediator, in other words, had a settlement he privately believed was fair — and a theory of why India wouldn't accept any settlement at all — that never appeared in his official report. By that autumn, London and Washington had already begun quietly discussing a new joint Security Council initiative to follow Dixon's failure.</p>
+
+    <h3><span class="h3-date">1951–1952</span>It never really died — and Nehru's own case</h3>
+    <p>Arbitration kept resurfacing for years after Truman's letter. In July 1951, Acheson personally briefed Truman on Kashmir again — Truman "expressed his concern over the trend of affairs in India," with Australia's Prime Minister Menzies also engaging the White House directly. Frank Graham succeeded Dixon as UN Representative, and by October 1951 was deliberately holding back a dramatic report to the Council, telling State Department officials he judged "sometimes more boldness was required to proceed slowly." By September, his own twelve-point plan still included — as its thirteenth clause — a fresh arbitration proposal, two years after Nehru had quietly let the first one die.</p>
+    <p>In February 1952, Truman personally approved sending Graham back for yet another attempt. That July, Nehru gave the fullest public statement of his Kashmir position found anywhere in this archive.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--truman)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Nehru: accession "complete in law and in fact" — but the pledge survives anyway <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"While the accession was complete in law and in fact, the other fact, which has nothing to do with law also remains, namely our pledge... that this matter can be reaffirmed or cancelled or cut out by the people of Kashmir, if they so wish" — "no forced marriages, no forced unions." On why India rejected UN arbitration: it would have "placed the aggressor and the aggressed on an equal footing."</p>
+      <div class="doc-source">Statement to the House of the People, 24 July 1952. Selected Works of Jawaharlal Nehru, Second Series, Vol. 19.</div>
+      </div>
+    </div>
+
+    <div class="sources-mini">Sources: FRUS 1946 Vol. V (Ch. 5, Subch. 1); FRUS 1947 Vol. III (Ch. 4, Subch. 1); FRUS 1948 Vol. V Pt. 1 (Ch. 9, Subch. 1, Docs. 205–392, of which 12 read); FRUS 1949 Vol. VI (Ch. 10, Subch. 1, of which 15 read); FRUS 1950 Vol. V (Ch. 13, Subch. 1, of which 3 read); FRUS 1951 Vol. VI (2 read); UN Security Council Resolutions 38 &amp; 47 (Refworld); Selected Works of Jawaharlal Nehru Vols. 9 &amp; 19; The Nehru Archive; Wrigley thesis (1958); secondary sourcing on the second Karachi Agreement (flagged, not verified). 53 documents read in full or substantial excerpt; well over 340 more within these volumes remain unopened.</div>
+    <a class="top-link" href="#top">↑ Back to index</a>
+  </div>
+
+
+  <!-- ══════════════ EISENHOWER ══════════════ -->
+  <div class="pres-section" id="eisenhower">
+    <div class="pres-eyebrow" style="color:var(--eisenhower)">1953–1961</div>
+    <h1 class="pres-h1">Eisenhower</h1>
+    <div class="pres-sub">Genuinely thin — two documents, both from 1957, and both worth reading closely for what they don't say as much as what they do.</div>
+
+    <div class="thin-note">
+      <strong>Honestly thin.</strong> Eight years, and this archive currently holds only two documents — both from the final years of Eisenhower's second term. That is very likely a gap in the research, not a gap in the history: the mid-1950s, with SEATO and the Baghdad Pact reshaping US-Pakistan military ties, is exactly the period Wrigley's 1958 thesis argues mattered most for whether America's Kashmir position stayed neutral. This section will grow.
+    </div>
+
+    <h3><span class="h3-date">13 July 1957</span>Eisenhower and Pakistan's Prime Minister, in full</h3>
+    <p>A complete joint statement, issued after Prime Minister Suhrawardy addressed Congress, records him raising Kashmir and the Indus waters directly with Eisenhower.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--eisenhower)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Suhrawardy raises Kashmir; Eisenhower hopes for a UN-consistent settlement <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Suhrawardy states Pakistan's desire to settle "peacefully and in conformity with international law and the decisions of the United Nations"; Eisenhower expresses hope that "such regional disputes may be solved speedily, equitably, and permanently, in accordance with the principles of the United Nations." The statement also covers SEATO, the Baghdad Pact, and US aid to Pakistan.</p>
+      <div class="doc-source">Joint Statement Following Discussions With Prime Minister Suhrawardy of Pakistan — The American Presidency Project (UCSB).</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">16 July 1957</span>SNIE 50-57: the full interagency estimate</h3>
+    <p>Three days later, the intelligence community delivered its own read — not diplomatic language, but a hard assessment of where the dispute was actually headed.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--eisenhower)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">"Probable Developments in the Kashmir Dispute" — CIA, State, and every armed service sign off <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">The estimate judged tension would stay high for six to nine months, Pakistan would likely conclude forceful action carried more risk than reward, and the US "will almost certainly be subjected to strong pressures from both sides" regardless of its own position — remaining a source of friction rather than resolution.</p>
+      <div class="doc-source">SNIE 50-57, 16 July 1957. FRUS 1955-57, Vol. VIII, Document 61; also held at CIA-RDP79R01012A009900050001-9.</div>
+      </div>
+    </div>
+
+    <div class="sources-mini">Sources: The American Presidency Project (UCSB); FRUS 1955-57 Vol. VIII; CIA Reading Room. 2 documents, both read in full.</div>
+    <a class="top-link" href="#top">↑ Back to index</a>
+  </div>
+
+  <!-- ══════════════ KENNEDY ══════════════ -->
+  <div class="pres-section" id="kennedy">
+    <div class="pres-eyebrow" style="color:var(--kennedy)">1961–1963</div>
+    <h1 class="pres-h1">Kennedy</h1>
+    <div class="pres-sub">The one administration in this whole archive where a president personally, repeatedly pushed for a Kashmir settlement — not through subordinates, but in his own signed directive and his own envoy's pressure on Nehru.</div>
+
+    <h3><span class="h3-date">22–23 June 1962</span>Nehru's raw reaction to a Security Council vote</h3>
+    <p>The Council's Kashmir debate concluded 22 June 1962 with a resolution urging direct negotiations; the US voted in favour, but it failed on a Soviet veto. The next day, in the Indian Parliament, Nehru reacted with unusual rawness.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--kennedy)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Nehru: "deep regret and sorrow" at the US and UK <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Nehru told Parliament he felt "deep regret and sorrow" that the US and UK "should almost invariably be against us" on Goa and Kashmir alike, saying the debate had "hurt and injured" India and created "doubt in our minds about the goodwill" of both powers.</p>
+      <div class="doc-source">FRUS 1961–63, Vol. XIX, Editorial Note, Document 145.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">6 December 1961</span>Kennedy's own directive</h3>
+    <p>Months before that vote, Kennedy had personally signed a directive that named a Kashmir settlement as an explicit US objective — not a hoped-for byproduct of other policy, but a stated goal.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--kennedy)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">NSAM 209: "a plan of action to encourage a Kashmir settlement" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Kennedy's own National Security Action Memorandum approves emergency military aid to India and directs the NSC's South Asia Subcommittee to prepare recommendations including, explicitly, "a plan of action to encourage a Kashmir settlement." Copies went to the CIA Director and the Bureau of the Budget.</p>
+      <div class="doc-source">National Security Action Memorandum No. 209, FRUS 1961–63, Vol. XIX, Document 223.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">22–28 November 1962</span>Harriman presses Nehru, after the China war</h3>
+    <p>The single richest document found across this entire project. Days after India's ceasefire with China, Averell Harriman met Nehru repeatedly to press for a Kashmir settlement, reported by Ambassador Galbraith in extraordinary detail.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--kennedy)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">Nehru, in his own words, rules options in and out <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Nehru explicitly rejected both "giving half to Pakistan" and "independent status for Kashmir," while suggesting arrangements along lines proposed by M.J. Desai and Galbraith himself might work. By the third meeting, he had agreed in principle to ministerial-level talks with Ayub — though his opening position would be limited to "adjustment [of the] cease fire line."</p>
+      <div class="doc-source">Telegram From the Embassy in India (Galbraith), FRUS 1961–63, Vol. XIX, Document 214.</div>
+      </div>
+    </div>
+    <p>Two further State Department documents from this period — an instruction to reassure Ayub of "US determination to push for Kashmir settlement," and an internal assessment that no US initiative was yet possible "at this stage" — round out a period in which Kashmir had genuine, sustained White House attention.</p>
+
+    <div class="sources-mini">Sources: FRUS 1961-63, Vol. XIX. 5 documents: 3 read in full, 2 substantially excerpted.</div>
+    <a class="top-link" href="#top">↑ Back to index</a>
+  </div>
+
+  <!-- ══════════════ JOHNSON ══════════════ -->
+  <div class="pres-section" id="johnson">
+    <div class="pres-eyebrow" style="color:var(--johnson)">1963–1969</div>
+    <h1 class="pres-h1">Johnson</h1>
+    <div class="pres-sub">The 1965 war happened on his watch, but the record here is thinner than the events warrant — a dedicated CIA Task Force, and citations still waiting to be opened in full.</div>
+
+    <div class="thin-note">
+      <strong>A gap worth naming.</strong> One document sits right at the Kennedy-Johnson transition (below) and is genuinely ambiguous — drafted in the weeks around the assassination, its exact authorship period unclear. The FRUS Volume XXV citations for the 1965 war itself are confirmed real but not yet read in full text; that is the clearest single next step for this section.
+    </div>
+
+    <h3><span class="h3-date">November–December 1963</span>An impasse report, drafted across a transition</h3>
+    <p>A 14-page CIA Office of Current Intelligence report lays out the dispute's history since 1846 and a precise order of battle — roughly 25,000 Pakistani/Azad Kashmir troops against roughly 45,000 Indian Army troops. Internal references to "incidents in late October" as very recent place its drafting in the November-December 1963 window — meaning it was very likely written across Kennedy's assassination, and its true authorship period cannot be cleanly assigned to either president.</p>
+
+    <h3><span class="h3-date">13–20 September 1965</span>A dedicated Kashmir Task Force</h3>
+    <p>During the 1965 war itself, a CIA internal activity report confirms the Agency stood up dedicated organizational machinery for the crisis.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--johnson)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">"Drafted full time for service on the Kashmir Task Force" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">The report records the week's publication of "CIA/BI GM 66-2, Kashmir" — a geographic intelligence memorandum — and states plainly that its author had been assigned full-time to a dedicated Kashmir Task Force during the war.</p>
+      <div class="doc-source">CIA DDI Activity Report Item, CIA-RDP79-01155A000200020135-7.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">1964–1968</span>The nuclear-anxiety correspondence</h3>
+    <p>A 22-document collection of State Department nuclear-policy material — abstracted, not yet individually read in full — runs from 1961 to 1983, but its Johnson-era highlights are substantial: an October 1964 JCS memo (after China's first nuclear test) opposing security guarantees to India that might alienate Pakistan, and a January 1967 JCS memo predicting India would "probably" test a device "within the next few years." Neither is about Kashmir territorially, but both tie India's China-driven nuclear anxiety, and Pakistan's alliance with Washington, directly back to the unresolved dispute.</p>
+
+    <div class="sources-mini">Sources: CIA Reading Room; National Security Archive Briefing Book No. 6; FRUS 1964-68 Vol. XXV (cited, not yet read in full). 3 documents currently in this section; the 1965 war's own FRUS volume is the clear next target.</div>
+    <a class="top-link" href="#top">↑ Back to index</a>
+  </div>
+
+  <!-- ══════════════ NIXON ══════════════ -->
+  <div class="pres-section" id="nixon">
+    <div class="pres-eyebrow" style="color:var(--nixon)">1969–1974</div>
+    <h1 class="pres-h1">Nixon</h1>
+    <div class="pres-sub">The most famous single document in this archive, and a live exchange from inside Kissinger's own office during the 1971 crisis.</div>
+
+    <h3><span class="h3-date">28 March 1971</span>The Blood Telegram</h3>
+    <p>Consul General Archer Blood's cable to Washington, provided directly by a reader of this archive after the original scan proved unreachable through normal research channels.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--nixon)">
+      <div class="doc-label tag-full">Full text read</div>
+      <div class="doc-title">"Selective Genocide" — and a direct challenge to US policy <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">"Here in Dacca we are mute and horrified witnesses to a reign of terror by the Pak military," Blood opens, naming specific murdered university faculty and reporting most elected Assembly members were also targeted. He directly questions whether Washington should keep "pretending to believe GOP false assertions and denying" the atrocities — and weighs his own likely expulsion against the value of keeping the reporting channel open.</p>
+      <div class="doc-source">Department of State Telegram, Dacca to SecState Washington, Cable DACCA 0959. Note: the transmission date-time group reads 280540Z MAR 71 — 28 March, not the 27 March date commonly cited in secondary accounts.</div>
+      </div>
+    </div>
+
+    <h3><span class="h3-date">1971</span>Kissinger's own office, mid-crisis</h3>
+    <p>A TOP SECRET/SENSITIVE CODEWORD meeting record from Kissinger's own office files captures Assistant Secretary Sisco, Under Secretary Johnson, and CIA Director Helms arguing over Chinese troop posture.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--nixon)">
+      <div class="doc-label tag-excerpt">Substantial excerpt</div>
+      <div class="doc-title">"Enough forces there to rattle the sword" <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">Sisco presses whether Chinese activity concerns "that strip of Azad Kashmir" specifically; Helms responds China already had "enough forces there to rattle the sword." The same record discusses holding Jordan's King Hussein back from supplying aircraft to Pakistan pending a presidential decision.</p>
+      <div class="doc-source">Kissinger office files, "South Asia," LOC-HAK-556-8-5-1 (declassified in part, 2011).</div>
+      </div>
+    </div>
+    <p>A dedicated FRUS volume — "South Asia Crisis, 1971" — covers the full crisis in the same granular format as the 1965 war; its document citations are confirmed but not yet individually opened.</p>
+
+    <div class="sources-mini">Sources: user-provided cable scan; CIA Reading Room; FRUS 1969-76 Vol. XI (cited). 3 documents: 1 read in full, 1 excerpted, 1 cited.</div>
+    <a class="top-link" href="#top">↑ Back to index</a>
+  </div>
+
+  <!-- ══════════════ BUSH SR ══════════════ -->
+  <div class="pres-section" id="bushsr">
+    <div class="pres-eyebrow" style="color:var(--bushsr)">1989–1993</div>
+    <h1 class="pres-h1">Bush Sr.</h1>
+    <div class="pres-sub">The thinnest section in the archive, honestly — and it should stay visibly thin until real research fills it, rather than be padded to look otherwise.</div>
+
+    <div class="thin-note">
+      <strong>Genuinely unverified.</strong> The single item held here is a secondary account, not a document read directly, and it should not be mistaken for more than that.
+    </div>
+
+    <h3><span class="h3-date">1990</span>The Kashmir crisis and the Gates mission — referenced, not read</h3>
+    <p>A 2025 National Security Archive posting describes declassified intelligence reporting on a 1990 crisis and a special diplomatic mission by Deputy National Security Adviser Robert Gates, credited by later scholarship with helping avert wider conflict. The underlying documents themselves have not been located or opened for this archive.</p>
+    <div class="doc-card" onclick="toggleDocCard(this)" style="border-left-color:var(--bushsr)">
+      <div class="doc-label tag-secondary">Secondary — unverified</div>
+      <div class="doc-title">A gap flagged, not filled <span class="doc-chevron">▾</span></div>
+      <div class="doc-body">
+      <p style="margin-bottom:0;">This entry exists to record that the 1990 crisis is real and documented elsewhere, not to claim it has been researched here. It is the clearest single next target for this presidency.</p>
+      <div class="doc-source">National Security Archive posting, "U.S. Intelligence on South Asian Conflict Scenarios" (22 Apr 2025).</div>
+      </div>
+    </div>
+
+    <div class="sources-mini">1 entry, secondary tier only. Nothing in this section has been independently verified.</div>
+    <a class="top-link" href="#top">↑ Back to index</a>
+  </div>
+
+  <!-- ══════════════ CLINTON ══════════════ -->
+  <div class="pres-section" id="clinton">
+    <div class="pres-eyebrow" style="color:var(--clinton)">1993–2001</div>
+    <h1 class="pres-h1">Clinton</h1>
+    <div class="pres-sub">Also thin, and for the same honest reason — the insurgency's most violent phase happened on this watch, and the record here doesn't yet reflect that.</div>
+
+    <div class="thin-note">
+      <strong>Three entries, none opened in full.</strong> This is the period of the most intense Kashmir insurgency, and the gap between what almost certainly exists in the archives and what has actually been read is wider here than anywhere else in this project.
+    </div>
+
+    <h3><span class="h3-date">1993</span>A National Intelligence Estimate — referenced, not read</h3>
+    <p>A 2025 NSA posting describes a 1993 NIE assessing roughly 1-in-5 odds of India-Pakistan conflict, released only after a formal declassification appeal.</p>
+
+    <h3><span class="h3-date">5 January 1993</span>A short FOIA record on separatist groups</h3>
+    <p>A 2-page, unclassified CIA document concerning a "key Kashmiri separatist group" — title and date confirmed, content not yet opened. At only two pages, this is the fastest genuine win available for this whole section.</p>
+
+    <h3><span class="h3-date">1994–2001</span>Clinton Library NSC records — a catalog entry only</h3>
+    <p>A Clinton Digital Library record describes NSC documents (FOIA case 2007-1635-F) covering exactly this period, addressing Pakistani state support for J&amp;K militancy — the most violent phase of the insurgency. This is a library catalog description confirming the record's existence; the documents themselves have not been requested or opened.</p>
+
+    <div class="sources-mini">Sources: National Security Archive; CIA FOIA Collection; Clinton Digital Library. 3 entries, all secondary or citation-only. This is the section most in need of real research.</div>
+    <a class="top-link" href="#top">↑ Back to index</a>
+  </div>
+
+</main>
+
+<footer>PRISM — Policy Research Institute for Security, Intelligence &amp; Modern Threats. A working archive, actively growing. Verify all primary sourcing independently before citing.</footer>
+
+<script>
+  // Collapsible doc-cards — default expanded; click anywhere on a card to collapse/expand it.
+  function toggleDocCard(el) {
+    el.classList.toggle('collapsed');
+  }
+
+  // Sticky "reading: <president>" indicator, driven by which section is currently in view.
+  (function() {
+    const sections = Array.from(document.querySelectorAll('.pres-section'));
+    const indicator = document.getElementById('readingIndicator');
+    const dot = document.getElementById('riDot');
+    const text = document.getElementById('riText');
+    if (!sections.length || !indicator) return;
+
+    const data = sections.map(sec => {
+      const eyebrow = sec.querySelector('.pres-eyebrow');
+      const h1 = sec.querySelector('.pres-h1');
+      const color = eyebrow ? getComputedStyle(eyebrow).color : '#201D2B';
+      return { el: sec, name: h1 ? h1.textContent : sec.id, tenure: eyebrow ? eyebrow.textContent : '', color };
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      // Find the section whose top is closest to (but above) the current scroll position.
+      let current = null;
+      for (const d of data) {
+        const rect = d.el.getBoundingClientRect();
+        if (rect.top <= 80) current = d;
+      }
+      if (current) {
+        indicator.classList.add('visible');
+        dot.style.background = current.color;
+        text.textContent = `Reading: ${current.name} (${current.tenure})`;
+      } else {
+        indicator.classList.remove('visible');
+      }
+    }, { threshold: [0, 0.01], rootMargin: '-80px 0px 0px 0px' });
+
+    // IntersectionObserver alone can miss fast scrolls, so also check on scroll (throttled).
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          let current = null;
+          for (const d of data) {
+            const rect = d.el.getBoundingClientRect();
+            if (rect.top <= 80) current = d;
+          }
+          if (current && window.scrollY > 200) {
+            indicator.classList.add('visible');
+            dot.style.background = current.color;
+            text.textContent = `Reading: ${current.name} (${current.tenure})`;
+          } else {
+            indicator.classList.remove('visible');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    sections.forEach(sec => observer.observe(sec));
+  })();
+</script>
+
+</body>
+</html>
