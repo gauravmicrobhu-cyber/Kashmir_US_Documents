@@ -114,6 +114,20 @@
 
   a.top-link { display: inline-block; margin-top: 30px; font-size: 12.5px; color: var(--ink-soft); text-decoration: none; }
   a.top-link:hover { text-decoration: underline; }
+
+  /* ── TAPPABLE NAME TAGS ── */
+  .person-tag {
+    border-bottom: 1.5px dotted var(--ink-faint); cursor: pointer;
+  }
+  .person-popup {
+    position: fixed; z-index: 200; max-width: 300px; background: var(--ink); color: var(--surface);
+    border-radius: 6px; padding: 12px 14px; font-family: var(--sans); font-size: 13px; line-height: 1.5;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25); display: none;
+  }
+  .person-popup.visible { display: block; }
+  .person-popup .pp-name { font-family: var(--serif); font-size: 14.5px; font-weight: 700; margin-bottom: 3px; }
+  .person-popup .pp-role { color: rgba(255,255,255,0.75); font-size: 12px; }
+  .person-popup .pp-close { position: absolute; top: 6px; right: 9px; font-size: 14px; color: rgba(255,255,255,0.5); cursor: pointer; }
 </style>
 </head>
 <body>
@@ -968,6 +982,149 @@
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     sections.forEach(sec => observer.observe(sec));
+  })();
+
+  // ── Tappable name tags ──
+  // Curated dictionary — sorted longest-name-first below so "Liaquat Ali Khan" matches
+  // before a bare "Liaquat" or "Khan" could. Only touches narrative prose (.doc-body p
+  // and direct <p> children of .pres-section), never doc-source citation lines, so
+  // sourcing text is never altered.
+  const PEOPLE = {
+    "Jawaharlal Nehru": "Prime Minister of India, 1947–1964",
+    "Nehru": "Jawaharlal Nehru — Prime Minister of India, 1947–1964",
+    "Muhammad Ali Jinnah": "Governor-General of Pakistan, 1947–1948",
+    "Jinnah": "Muhammad Ali Jinnah — Governor-General of Pakistan, 1947–1948",
+    "Liaquat Ali Khan": "Prime Minister of Pakistan, 1947–1951",
+    "Sheikh Abdullah": "Head of Kashmir's emergency/interim administration from Oct 1947; later Prime Minister of Jammu & Kashmir",
+    "Lord Mountbatten": "Governor-General of India, 1947–1948; former Viceroy",
+    "Mountbatten": "Lord Mountbatten — Governor-General of India, 1947–1948; former Viceroy",
+    "Vallabhbhai Patel": "Deputy Prime Minister and Home Minister of India",
+    "Patel": "Vallabhbhai Patel — Deputy Prime Minister and Home Minister of India",
+    "Girja Shankar Bajpai": "Secretary-General, India's Ministry of External Affairs",
+    "Bajpai": "Girja Shankar Bajpai — Secretary-General, India's Ministry of External Affairs",
+    "Vijaya Lakshmi Pandit": "India's Ambassador to the US (and Nehru's sister)",
+    "Pandit": "Vijaya Lakshmi Pandit — India's Ambassador to the US (and Nehru's sister)",
+    "C. Rajagopalachari": "Senior Congress leader; later independent India's last Governor-General",
+    "Rajagopalachari": "C. Rajagopalachari — senior Congress leader; later India's last Governor-General",
+    "V.P. Menon": "Secretary, India's States Ministry",
+    "D.P. Dhar": "Minister, Jammu & Kashmir state government",
+    "Ghulam Abbas": "Azad Kashmir political leader",
+    "Sir Zafrulla Khan": "Foreign Minister of Pakistan",
+    "Zafrulla Khan": "Foreign Minister of Pakistan",
+    "Zafrullah Khan": "Foreign Minister of Pakistan",
+    "M.A.H. Ispahani": "Pakistan's Ambassador to the US",
+    "Ispahani": "M.A.H. Ispahani — Pakistan's Ambassador to the US",
+    "Mohammed Ali": "Secretary-General, Government of Pakistan",
+
+    "George Marshall": "US Secretary of State, 1947–1949",
+    "Marshall": "George Marshall — US Secretary of State, 1947–1949",
+    "Dean Acheson": "US Secretary of State, 1949–1953",
+    "Acheson": "Dean Acheson — US Secretary of State, 1949–1953",
+    "Robert Lovett": "US Under Secretary of State (Acting Secretary at times), 1947–1949",
+    "Lovett": "Robert Lovett — US Under Secretary of State (Acting Secretary at times)",
+    "James Byrnes": "US Secretary of State, 1945–1947",
+    "Byrnes": "James Byrnes — US Secretary of State, 1945–1947",
+    "President Truman": "President of the United States, 1945–1953",
+    "Truman": "Harry S. Truman — President of the United States, 1945–1953",
+    "Warren Austin": "US Representative at the United Nations",
+    "Austin": "Warren Austin — US Representative at the United Nations",
+    "Henry Grady": "First US Ambassador to India, 1947–1948",
+    "Grady": "Henry Grady — First US Ambassador to India, 1947–1948",
+    "Loy Henderson": "US Ambassador to India, 1948–1951",
+    "Henderson": "Loy Henderson — US Ambassador to India, 1948–1951",
+    "Donovan": "US Chargé d'Affaires in India (under Grady/Henderson)",
+    "J. Wesley Huddle": "US Representative on UNCIP",
+    "Huddle": "J. Wesley Huddle — US Representative on UNCIP",
+    "John Foster Dulles": "Acting Chairman, US UN Delegation, Nov–Dec 1948; later Secretary of State (1953–59)",
+    "Dulles": "John Foster Dulles — Acting Chairman, US UN Delegation, Nov–Dec 1948; later Secretary of State",
+    "George McGhee": "US Assistant Secretary of State for Near Eastern, South Asian & African Affairs",
+    "McGhee": "George McGhee — US Assistant Secretary of State (Near East, South Asia, Africa)",
+    "Hickerson": "US Assistant Secretary of State for UN Affairs",
+    "Admiral Nimitz": "Proposed UN Plebiscite Administrator for Kashmir",
+    "Nimitz": "Admiral Chester Nimitz — proposed UN Plebiscite Administrator for Kashmir",
+
+    "Sir Owen Dixon": "UN Representative on Kashmir, 1950 (Australian jurist)",
+    "Dixon": "Sir Owen Dixon — UN Representative on Kashmir, 1950 (Australian jurist)",
+    "Frank Graham": "UN Representative on Kashmir, 1951 onward",
+    "Graham": "Frank Graham — UN Representative on Kashmir, 1951 onward",
+    "General McNaughton": "Canadian mediator on Kashmir, Dec 1949",
+    "McNaughton": "General A.G.L. McNaughton — Canadian mediator on Kashmir, Dec 1949",
+    "Oldřich Chyle": "Czechoslovakia's UNCIP representative, 1949",
+    "Chyle": "Dr. Oldřich Chyle — Czechoslovakia's UNCIP representative, 1949",
+    "Josef Korbel": "Chyle's predecessor as Czechoslovak UNCIP representative; father of Madeleine Albright",
+    "Korbel": "Josef Korbel — Chyle's predecessor on UNCIP; father of Madeleine Albright",
+    "Madeleine Albright": "Later US Secretary of State (1997–2001); daughter of Josef Korbel",
+    "Albright": "Madeleine Albright — later US Secretary of State; daughter of Josef Korbel",
+    "Lozano": "UNCIP commissioner (Colombian)",
+    "Tsiang": "China's delegate at the UN Security Council",
+
+    "Philip Noel-Baker": "British Secretary of State for Commonwealth Relations",
+    "Noel-Baker": "Philip Noel-Baker — British Secretary of State for Commonwealth Relations",
+    "Lord Ismay": "British official, India Office/Cabinet Mission circle",
+    "Ismay": "Lord Ismay — British official, India Office/Cabinet Mission circle",
+    "Clement Attlee": "British Prime Minister, 1945–1951",
+    "Attlee": "Clement Attlee — British Prime Minister, 1945–1951",
+    "Robert Menzies": "Prime Minister of Australia",
+    "Menzies": "Robert Menzies — Prime Minister of Australia"
+  };
+
+  (function() {
+    const names = Object.keys(PEOPLE).sort((a, b) => b.length - a.length);
+    const pattern = new RegExp('\\b(' + names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')\\b', 'g');
+
+    const popup = document.createElement('div');
+    popup.className = 'person-popup';
+    popup.innerHTML = '<span class="pp-close">✕</span><div class="pp-name"></div><div class="pp-role"></div>';
+    document.body.appendChild(popup);
+    const ppName = popup.querySelector('.pp-name');
+    const ppRole = popup.querySelector('.pp-role');
+
+    function showPopup(target, label) {
+      const info = PEOPLE[label];
+      if (!info) return;
+      const parts = info.split(' — ');
+      ppName.textContent = parts.length > 1 ? label : label;
+      ppRole.textContent = info;
+      const rect = target.getBoundingClientRect();
+      popup.style.left = Math.max(10, Math.min(window.innerWidth - 310, rect.left)) + 'px';
+      popup.style.top = (rect.bottom + 8) + 'px';
+      popup.classList.add('visible');
+    }
+    function hidePopup() { popup.classList.remove('visible'); }
+    popup.addEventListener('click', (e) => { e.stopPropagation(); hidePopup(); });
+    document.addEventListener('click', hidePopup);
+
+    // Walk narrative paragraphs only — doc-body <p> tags and direct <p> children of
+    // .pres-section — never .doc-source, .doc-title, or blockquote/cite, so citation
+    // text and titles are never touched.
+    const containers = document.querySelectorAll('.doc-body p, .pres-section > p');
+    containers.forEach(p => {
+      // Skip if this paragraph is inside a blockquote (leave direct quotes untouched)
+      if (p.closest('blockquote')) return;
+      const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, null);
+      const textNodes = [];
+      let node;
+      while ((node = walker.nextNode())) textNodes.push(node);
+      textNodes.forEach(textNode => {
+        const text = textNode.nodeValue;
+        if (!pattern.test(text)) { pattern.lastIndex = 0; return; }
+        pattern.lastIndex = 0;
+        const frag = document.createDocumentFragment();
+        let lastIndex = 0;
+        let m;
+        while ((m = pattern.exec(text))) {
+          if (m.index > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
+          const span = document.createElement('span');
+          span.className = 'person-tag';
+          span.textContent = m[0];
+          span.addEventListener('click', (e) => { e.stopPropagation(); showPopup(span, m[0]); });
+          frag.appendChild(span);
+          lastIndex = m.index + m[0].length;
+        }
+        if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+        textNode.parentNode.replaceChild(frag, textNode);
+      });
+    });
   })();
 </script>
 
