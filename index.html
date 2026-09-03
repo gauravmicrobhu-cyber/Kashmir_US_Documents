@@ -1082,8 +1082,7 @@
     function showPopup(target, label) {
       const info = PEOPLE[label];
       if (!info) return;
-      const parts = info.split(' — ');
-      ppName.textContent = parts.length > 1 ? label : label;
+      ppName.textContent = label;
       ppRole.textContent = info;
       const rect = target.getBoundingClientRect();
       popup.style.left = Math.max(10, Math.min(window.innerWidth - 310, rect.left)) + 'px';
@@ -1091,39 +1090,55 @@
       popup.classList.add('visible');
     }
     function hidePopup() { popup.classList.remove('visible'); }
-    popup.addEventListener('click', (e) => { e.stopPropagation(); hidePopup(); });
-    document.addEventListener('click', hidePopup);
+
+    // Single delegated click handler for the whole document — reads the matched name
+    // from a data attribute rather than a closure over the loop variable, which avoids
+    // a stale-reference bug (the previous version's per-span closures all read the same
+    // shared loop variable, which had already become null by the time any click fired).
+    document.addEventListener('click', (e) => {
+      const tag = e.target.closest('.person-tag');
+      if (tag) {
+        e.stopPropagation();
+        showPopup(tag, tag.dataset.name);
+        return;
+      }
+      if (e.target.closest('.person-popup')) { hidePopup(); return; }
+      hidePopup();
+    });
 
     // Walk narrative paragraphs only — doc-body <p> tags and direct <p> children of
     // .pres-section — never .doc-source, .doc-title, or blockquote/cite, so citation
     // text and titles are never touched.
     const containers = document.querySelectorAll('.doc-body p, .pres-section > p');
     containers.forEach(p => {
-      // Skip if this paragraph is inside a blockquote (leave direct quotes untouched)
       if (p.closest('blockquote')) return;
-      const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, null);
-      const textNodes = [];
-      let node;
-      while ((node = walker.nextNode())) textNodes.push(node);
-      textNodes.forEach(textNode => {
-        const text = textNode.nodeValue;
-        if (!pattern.test(text)) { pattern.lastIndex = 0; return; }
-        pattern.lastIndex = 0;
-        const frag = document.createDocumentFragment();
-        let lastIndex = 0;
-        let m;
-        while ((m = pattern.exec(text))) {
-          if (m.index > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
-          const span = document.createElement('span');
-          span.className = 'person-tag';
-          span.textContent = m[0];
-          span.addEventListener('click', (e) => { e.stopPropagation(); showPopup(span, m[0]); });
-          frag.appendChild(span);
-          lastIndex = m.index + m[0].length;
-        }
-        if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
-        textNode.parentNode.replaceChild(frag, textNode);
-      });
+      try {
+        const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, null);
+        const textNodes = [];
+        let node;
+        while ((node = walker.nextNode())) textNodes.push(node);
+        textNodes.forEach(textNode => {
+          const text = textNode.nodeValue;
+          pattern.lastIndex = 0;
+          if (!pattern.test(text)) return;
+          pattern.lastIndex = 0;
+          const frag = document.createDocumentFragment();
+          let lastIndex = 0;
+          let m;
+          while ((m = pattern.exec(text))) {
+            const matchedName = m[0]; // fresh binding per match — this is what fixes the bug
+            if (m.index > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
+            const span = document.createElement('span');
+            span.className = 'person-tag';
+            span.textContent = matchedName;
+            span.dataset.name = matchedName;
+            frag.appendChild(span);
+            lastIndex = m.index + matchedName.length;
+          }
+          if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+          textNode.parentNode.replaceChild(frag, textNode);
+        });
+      } catch (err) { /* one bad paragraph shouldn't break the rest */ }
     });
   })();
 </script>
